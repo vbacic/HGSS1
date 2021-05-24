@@ -7,32 +7,46 @@ function Firestore(props) {
   
   const [dojave, setdojave] = React.useState([]);
   const [dojava, setdojava] = React.useState("");
+
+  const [vrste, setvrste] = React.useState([]);
+  const [vrsta, setvrsta] = React.useState("");
+
+  const [ozljedeni, setozljedeni] = React.useState([]);
+  const [ozljeden, setozljeden] = React.useState("");
+
   const [uredivanje, seturedivanje] = React.useState(false);
   const [id, setId] = React.useState("");
+
   React.useEffect(() => {
-    // Para conectar la base de datos usaremos una funcion
-    const obtenerDatos = async () => {
+
+    // Za povezivanje podataka koristit ce se funkcija
+    const dohvatinfo = async () => {
       try {
-        // Ejecutamos el metodo get lo podemos hacer dentro del try o podemos usar promesas con then
+       
         const data = await db
           .collection(props.user.uid)
           .orderBy("fecha", "desc")
           .get();
 
-        // Una vez obtenemos la colleccion en este caso el id del usuario la mostramos en consola
+       // Jednom kada dobijemo kolekciju, u ovom slučaju id korisnika, prikazujemo je
         const arrayData = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         setdojave(arrayData);
+        setvrste(arrayData);
+        setozljedeni(arrayData);
+
       } catch (error) {
         console.log(error);
       }
     };
     // Funkcija da se jednom vrti a ne beskonacno puta
-    obtenerDatos();
+    dohvatinfo();
   }, [props.user.uid]);
-  const aggTarea = async (e) => {
+
+
+  const dodavanjedojave = async (e) => {
     e.preventDefault();
     if (!dojava.trim()) {
       console.log("Prazno je, popunite polje");
@@ -41,11 +55,21 @@ function Firestore(props) {
     try {
       const novadojava = {
         name: dojava,
+        vrsta_nesrece: vrsta,
+        broj_ozljedenih: ozljeden,
         fecha: Date.now(),
       };
       const data = await db.collection(props.user.uid).add(novadojava);
       setdojave([...dojave, { ...novadojava, id: data.id }]);
       setdojava("");
+
+      setvrste([...vrste, { ...novadojava, id: data.id }]);
+      setvrsta("");
+
+      setozljedeni([...ozljedeni, { ...novadojava, id: data.id }]);
+      setozljeden("");
+
+
     } catch (error) {
       console.log(error);
     }
@@ -61,9 +85,11 @@ function Firestore(props) {
       console.log(error);
     }
   };
-  const activarEdicion = (item) => {
+  const aktivirajuredenje = (item) => {
     seturedivanje(true);
     setdojava(item.name);
+    setvrsta(item.vrsta_nesrece)
+    setozljeden(item.broj_ozljedenih)
     setId(item.id);
   };
   const urediDojavu = async (e) => {
@@ -74,12 +100,15 @@ function Firestore(props) {
     try {
       await db.collection(props.user.uid).doc(id).update({
         name: dojava,
+        vrsta_nesrece: vrsta,
       });
-      const arrayEditado = dojave.map((item) =>
-        item.id === id ? { id: item.id, name: dojava, fecha: item.fecha } : item
+      const uredivanjeniza = dojave.map((item) =>
+        item.id === id ? { id: item.id, name: dojava, vrsta_nesrece: vrsta, broj_ozljedenih: ozljeden, fecha: item.fecha } : item
       );
-      setdojave(arrayEditado);
+      setdojave(uredivanjeniza);
       setdojava("");
+      setvrsta("")
+    setozljeden("")
       setId("");
       seturedivanje(false);
     } catch (error) {
@@ -101,13 +130,13 @@ function Firestore(props) {
               className="w-11/12 lg:w-3/4 mx-auto p-4 box-border mb-2 flex flex-col lg:flex-row items-center rounded bg-blue-200"
             >
               <p className="w-full text-center lg:text-left lg:w-3/4 mb-5 lg:m-0">
-                {dojava.name} - {moment(dojava.fecha).format("L")} a las{" "}
+                {dojava.name} - {dojava.vrsta_nesrece} - {moment(dojava.fecha).format("L")} u {" "}
                 {moment(dojava.fecha).format("LT")}
               </p>
               <div className="div-buttons mx-auto flex flex-shrink">
                 <button
                   className="rounded bg-orange-400 border border-b-4 border-orange-600 text-white p-4"
-                  onClick={() => activarEdicion(dojava)}
+                  onClick={() => aktivirajuredenje(dojava)}
                 >
                   Uredi
                 </button>
@@ -126,7 +155,7 @@ function Firestore(props) {
             {uredivanje ? "Uredi dojavu" : "Dodaj dojavu"}
           </h2>
           <form
-            onSubmit={uredivanje === true ? urediDojavu : aggTarea}
+            onSubmit={uredivanje === true ? urediDojavu : dodavanjedojave}
             className="w-3/4 mx-auto"
           >
             <input
@@ -137,6 +166,24 @@ function Firestore(props) {
               onChange={(e) => setdojava(e.target.value)}
               value={dojava}
             />
+      <input
+              type="text"
+              name="vrsta"
+              className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
+              placeholder="Unesite vrstu nesrece (pad sa litice, sumnja na lom...)"
+              onChange={(e) => setvrsta(e.target.value)}
+              value={vrsta}
+            />
+
+<input
+              type="number"
+              name="vrsta"
+              className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
+              placeholder="Unesite broj ozljedenih"
+              onChange={(e) => setozljeden(e.target.value)}
+              value={ozljeden}
+            />
+
             {uredivanje === true ? (
               <button
                 type="submit"
