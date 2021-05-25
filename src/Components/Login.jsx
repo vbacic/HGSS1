@@ -1,12 +1,16 @@
 import React from "react";
 import { db, auth } from "../firebase";
 import { withRouter } from "react-router-dom";
+
+
 const Login = (props) => {
-  // Creando los states de los campos
+  
+
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
   const [msg, setMsg] = React.useState("");
   const [registr, setRegistr] = React.useState(true);
+
 
   const registriranjeKorisnika = React.useCallback(async () => {
     try {

@@ -3,6 +3,7 @@ import { db } from "../firebase";
 import moment from "moment";
 import "moment/locale/es";
 
+
 function Firestore(props) {
   
   const [dojave, setdojave] = React.useState([]);
@@ -13,6 +14,15 @@ function Firestore(props) {
 
   const [ozljedeni, setozljedeni] = React.useState([]);
   const [ozljeden, setozljeden] = React.useState("");
+
+  const [brojevi, setbrojevi] = React.useState([]);
+  const [broj, setbroj] = React.useState("");
+
+  const [imena, setimena] = React.useState([]);
+  const [ime, setime] = React.useState("");
+
+  const [prezimena, setprezimena] = React.useState([]);
+  const [prezime, setprezime] = React.useState("");
 
   const [uredivanje, seturedivanje] = React.useState(false);
   const [id, setId] = React.useState("");
@@ -36,6 +46,9 @@ function Firestore(props) {
         setdojave(arrayData);
         setvrste(arrayData);
         setozljedeni(arrayData);
+        setbrojevi(arrayData);
+        setimena(arrayData);
+        setprezimena(arrayData);
 
       } catch (error) {
         console.log(error);
@@ -57,6 +70,9 @@ function Firestore(props) {
         name: dojava,
         vrsta_nesrece: vrsta,
         broj_ozljedenih: ozljeden,
+        broj_mobitela: broj,
+        ime: ime,
+        prezime: prezime,
         fecha: Date.now(),
       };
       const data = await db.collection(props.user.uid).add(novadojava);
@@ -69,29 +85,43 @@ function Firestore(props) {
       setozljedeni([...ozljedeni, { ...novadojava, id: data.id }]);
       setozljeden("");
 
+      setvrste([...brojevi, { ...novadojava, id: data.id }]);
+      setbroj("");
+
+      setimena([...imena, { ...novadojava, id: data.id }]);
+      setime("");
+
+      setprezimena([...prezimena, { ...novadojava, id: data.id }]);
+      setprezime("");
 
     } catch (error) {
       console.log(error);
     }
     console.log(dojava);
   };
+
   const izbrisidojavu = async (id) => {
     try {
       await db.collection(props.user.uid).doc(id).delete();
 
-      const arrayFiltrado = dojave.filter((dojava) => dojava.id !== id);
-      setdojave(arrayFiltrado);
+      const filtriranjeniza = dojave.filter((dojava) => dojava.id !== id);
+      setdojave(filtriranjeniza);
     } catch (error) {
       console.log(error);
     }
   };
+
   const aktivirajuredenje = (item) => {
     seturedivanje(true);
     setdojava(item.name);
     setvrsta(item.vrsta_nesrece)
     setozljeden(item.broj_ozljedenih)
+    setbroj(item.broj_mobitela)
+    setime(item.ime)
+    setprezime(item.prezime)
     setId(item.id);
   };
+
   const urediDojavu = async (e) => {
     e.preventDefault();
     if (!dojava.trim()) {
@@ -101,14 +131,24 @@ function Firestore(props) {
       await db.collection(props.user.uid).doc(id).update({
         name: dojava,
         vrsta_nesrece: vrsta,
+        broj_ozljedenih: ozljeden,
+        broj_mobitela: broj,
+        ime: ime,
+        prezime: prezime
       });
+
+
       const uredivanjeniza = dojave.map((item) =>
-        item.id === id ? { id: item.id, name: dojava, vrsta_nesrece: vrsta, broj_ozljedenih: ozljeden, fecha: item.fecha } : item
+        item.id === id ? { id: item.id, name: dojava, vrsta_nesrece: vrsta, broj_ozljedenih: ozljeden, 
+       broj_mobitela: broj, ime: ime, prezime: prezime, fecha: item.fecha } : item
       );
       setdojave(uredivanjeniza);
       setdojava("");
       setvrsta("")
-    setozljeden("")
+      setozljeden("")
+      setbroj("")
+      setime("")
+      setprezime("")
       setId("");
       seturedivanje(false);
     } catch (error) {
@@ -159,16 +199,16 @@ function Firestore(props) {
             className="w-3/4 mx-auto"
           >
             <input
-              type="text"
+              type="number"
               name="name"
               className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
-              placeholder="Unesite novu dojavu"
+              placeholder="Hitnoća od 1-5"
               onChange={(e) => setdojava(e.target.value)}
               value={dojava}
             />
       <input
               type="text"
-              name="vrsta"
+              name="vrsta_nesrece"
               className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
               placeholder="Unesite vrstu nesrece (pad sa litice, sumnja na lom...)"
               onChange={(e) => setvrsta(e.target.value)}
@@ -177,11 +217,38 @@ function Firestore(props) {
 
 <input
               type="number"
-              name="vrsta"
+              name="broj_ozljedenih"
               className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
               placeholder="Unesite broj ozljedenih"
               onChange={(e) => setozljeden(e.target.value)}
               value={ozljeden}
+            />
+
+<input
+              type="number"
+              name="broj_mobitela"
+              className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
+              placeholder="Unesite broj mobitela"
+              onChange={(e) => setbroj(e.target.value)}
+              value={broj}
+            />
+
+<input
+              type="text"
+              name="ime"
+              className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
+              placeholder="Unesite ime"
+              onChange={(e) => setime(e.target.value)}
+              value={ime}
+            />
+
+<input
+              type="text"
+              name="prezime"
+              className="focus:outline-none w-full bg-gray-300 p-4 border mb-3"
+              placeholder="Unesite prezime"
+              onChange={(e) => setprezime(e.target.value)}
+              value={prezime}
             />
 
             {uredivanje === true ? (
