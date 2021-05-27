@@ -170,7 +170,7 @@ function Firestore(props) {
               className="w-11/12 lg:w-3/4 mx-auto p-4 box-border mb-2 flex flex-col lg:flex-row items-center rounded bg-blue-200"
             >
               <p className="w-full text-center lg:text-left lg:w-3/4 mb-5 lg:m-0">
-                {dojava.name} - {dojava.vrsta_nesrece} - {moment(dojava.fecha).format("L")} u {" "}
+                {dojava.name} - {dojava.vrsta_nesrece} - {dojava.broj_ozljedenih} - {dojava.broj_mobitela} - {dojava.ime} -  {dojava.prezime} - {moment(dojava.fecha).format("L")} u {" "}
                 {moment(dojava.fecha).format("LT")}
               </p>
               <div className="div-buttons mx-auto flex flex-shrink">
