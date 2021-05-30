@@ -4,7 +4,7 @@ import {Table} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {db} from '../firebase';
 import '../Style.css';
-import moment from 'moment';
+
 
 
 class ListaDojava extends Component {
