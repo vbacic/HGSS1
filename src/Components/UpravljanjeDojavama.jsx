@@ -4,6 +4,7 @@ import {Table} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {db} from '../firebase';
 import '../Style.css';
+import moment from 'moment';
 
 
 class ListaDojava extends Component {
@@ -16,6 +17,8 @@ class ListaDojava extends Component {
       key: ''
     };
   }
+
+  
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
@@ -78,12 +81,15 @@ class ListaDojava extends Component {
                     <td>{dojave.hitnoca_nesrece}</td>
                     <td>{dojave.vrsta_nesrece} </td>
                     <td>{dojave.datum}</td>
+
+                
+
                     <td>geografska dužina: {dojave.geo.longitude}, 
                     geografska širina: {dojave.geo.latitude}</td>
                    
-                    <Link to={`/edit/${dojave.key}`}>  <button className="block  mx-auto text-white rounded bg-orange-400 border border-b-4 border-orange-600" >
+                 {/*  <Link to={`/edit/${dojave.key}`}>  <button className="block  mx-auto text-white rounded bg-orange-400 border border-b-4 border-orange-600" >
     Uredi
-  </button></Link> 
+                </button></Link>  */}
                     <button className="block  mx-auto text-white rounded bg-green-400 border border-b-4 border-green-600" onClick={this.delete.bind(this, dojave.key)}>Izbrisi</button>
                   </tr>
                 )}
