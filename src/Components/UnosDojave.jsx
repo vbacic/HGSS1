@@ -60,7 +60,7 @@ function UnosDojave() {
 
 <div>
 <h1 className="font-bold text-center mx-auto text-3xl my-5">
-<img src={Logo} className="App-logo" alt="Logo" className="text-center mx-auto text-5xl my-5"/>
+<a href="http://www.hgss.hr/"><img src={Logo} className="App-logo" alt="Logo" className="text-center mx-auto text-5xl my-5"/> </a> 
 
         Prijavi nesreću
       </h1>
