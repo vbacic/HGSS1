@@ -120,7 +120,7 @@ function UnosDojave() {
             />
               <button
                 onClick={dodavanjedojave}
-                className="block px-4 py-3 mx-auto text-white rounded bg-green-400 border border-b-4 border-green-600"
+                className="block px-4 py-3 mx-auto text-white rounded bg-red-400 border border-b-4 border-red-600"
               >
                 Prijavi
               </button>
