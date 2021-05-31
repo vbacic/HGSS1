@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { db } from "../firebase";
 import "moment/locale/es";
+import Logo from '../logo.png';
 
 function UnosDojave() {
   const [hitnoca,setHitnoca] = React.useState();
@@ -58,7 +59,9 @@ function UnosDojave() {
           >
 
 <div>
-<h1 className="font-bold text-center mx-auto text-5xl my-5">
+<h1 className="font-bold text-center mx-auto text-3xl my-5">
+<img src={Logo} className="App-logo" alt="Logo" className="text-center mx-auto text-5xl my-5"/>
+
         Prijavi nesreću
       </h1>
     </div>
