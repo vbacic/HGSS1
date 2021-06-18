@@ -73,6 +73,7 @@ function UnosDojave() {
               placeholder="Hitnoća od 1-5"
               onChange={(e) => setHitnoca(e.target.value)}
               value={hitnoca}
+              autoFocus
             />
       <input
               type="text"
@@ -81,6 +82,7 @@ function UnosDojave() {
               placeholder="Unesite vrstu nesrece (pad sa litice, sumnja na lom...)"
               onChange={(e) => setvrsta(e.target.value)}
               value={vrsta}
+              
             />
 
 <input
@@ -121,6 +123,7 @@ function UnosDojave() {
               <button
                 onClick={dodavanjedojave}
                 className="block px-4 py-3 mx-auto text-white rounded bg-red-400 border border-b-4 border-red-600"
+                name="prijavi"
               >
                 Prijavi
               </button>

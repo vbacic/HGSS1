@@ -109,6 +109,7 @@ const Login = (props) => {
         </button>
         <button
           type="button"
+          name="Prijava"
           onClick={() => setRegistr(!registr)}
           className="block p-3 border-b-4 bg-blue-500 border-blue-700 rounded text-white w-3/4 mx-auto"
         >
